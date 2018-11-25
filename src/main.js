@@ -3,13 +3,29 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import firebase from 'firebase'
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+// wait for firebase auth to init
+// before creating the app
+
+let app = null;
+
+firebase.auth().onAuthStateChanged(() => {
+
+  // init app if not already created 
+  if(!app) {
+    /* eslint-disable no-new */
+  app = new Vue({
+    
+    el: '#app',
+    router,
+    components: { App },
+    template: '<App/>'
+  
+        })
+    }
 })
+
+
