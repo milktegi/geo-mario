@@ -28,58 +28,72 @@
 </template>
 
 <script>
-
-import slugify from 'slugify'
-import db from '@/firebase/init'
+import slugify from "slugify";
+import db from "@/firebase/init";
+import firebase from "firebase";
 
 export default {
-	name: 'Signup',
-	data() {
-		return {
-			email: null,
-			password: null,
-			alias: null,
-			feedback: null,
-			slug: null
-		}
-	},
-	methods: {
-		signup() {
-			// interact with firebase 
-			if(this.alias) {
-				this.slug = slugify(this.alias, {
-					replacement: '-',
-					remove: /[$*_+~.()'"!\-:@]/g,
-					lower: true
-				})
-				let ref = db.collection('users').doc(this.slug)
-				console.log(this.slug)
-				ref.get().then(doc => {
-					if(doc.exists) {					
-					this.feedback = '이미 사용중인 닉네입입니다.'
-					} else {
-						this.feeback = '사용가능한 닉네입입니다.'
-					}
-				})  
-			} else {
-				this.feedback = '닉네임을 바르게 입력해주세요.'
-			}
-		}
-	}
-}
+  name: "Signup",
+  data() {
+    return {
+      email: null,
+      password: null,
+      alias: null,
+      feedback: null,
+      slug: null
+    };
+  },
+  methods: {
+    signup() {
+      // interact with firebase
+      if (this.alias && this.email && this.password) {
+        this.slug = slugify(this.alias, {
+          replacement: "-",
+          remove: /[$*_+~.()'"!\-:@]/g,
+          lower: true
+        })
+        let ref = db.collection("users").doc(this.slug)
+        console.log(this.slug);
+        ref.get().then(doc => {
+    if (doc.exists) {
+            this.feedback = "이미 사용중인 닉네입입니다."
+	} else {
+    firebase.auth()
+			.createUserWithEmailAndPassword(this.email, this.password)
+      .then(cred => {
+        ref.set({
+          alias: this.alias,
+          geolocation: null,
+          user_id: cred.user.uid
+        })  
+      })
+      .then(() => {
+        this.$router.push({ name: 'GMap'})
+      })
+			.catch(err => {
+				console.log(err)
+				  this.feedback = err.message
+			  })
+        this.feeback = "사용가능한 닉네입입니다."
+      }
+  });
+      } else {
+        this.feedback = "닉네임을 바르게 입력해주세요."
+      }
+    }
+  }
+};
 </script>
 
 <style>
-
 .signup {
-	max-width: 400px;
-	margin-top: 60px;
+  max-width: 400px;
+  margin-top: 60px;
 }
-.signup h2{
-	font-size: 2.4em;
+.signup h2 {
+  font-size: 2.4em;
 }
-.signup .field{
-	margin-bottom: 16px;
+.signup .field {
+  margin-bottom: 16px;
 }
-
 </style>
