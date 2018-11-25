@@ -91,7 +91,7 @@ export default {
   margin-top: 60px;
 }
 .signup h2 {
-  font-size: 2.4em;
+  font-size: 2.3em;
 }
 .signup .field {
   margin-bottom: 16px;
