@@ -8,36 +8,62 @@
 			<input v-model="email" type="text" name="email">
 		</div>
 		<div class="field">
-			<label for="passowrd">비밀번호: </label>
-			<input v-model="passowrd" type="password" name="passowrd">
+			<label for="password">비밀번호: </label>
+			<input v-model="password" type="password" name="password">
 		</div>
 		<div class="field">
 			<label for="alias">닉네임: </label>
 			<input v-model="alias" type="text" name="alias">
 		</div>
-  </form>
+		<p class="red-text center" v-if="feedback">{{ feedback }}</p>
+
   <!-- button -->
   <div class="field center">
 	  <button class="btn deep-purple">제출</button>
   </div>
+    </form>
 </div>
 
 
 </template>
 
 <script>
+
+import slugify from 'slugify'
+import db from '@/firebase/init'
+
 export default {
 	name: 'Signup',
 	data() {
 		return {
 			email: null,
 			password: null,
-			alias: null
+			alias: null,
+			feedback: null,
+			slug: null
 		}
 	},
 	methods: {
 		signup() {
 			// interact with firebase 
+			if(this.alias) {
+				this.slug = slugify(this.alias, {
+					replacement: '-',
+					remove: /[$*_+~.()'"!\-:@]/g,
+					lower: true
+				})
+				let ref = db.collection('users').doc(this.slug)
+				console.log(this.slug)
+				ref.get().then(doc => {
+					if(doc.exists) {					
+					this.feedback = '이미 사용중인 닉네입입니다.'
+					} else {
+						this.feeback = '사용가능한 닉네입입니다.'
+					}
+				})  
+			} else {
+				this.feedback = '닉네임을 바르게 입력해주세요.'
+			}
 		}
 	}
 }

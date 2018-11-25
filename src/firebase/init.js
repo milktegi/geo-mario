@@ -3,6 +3,7 @@
  
 
   // Initialize Firebase
+  
   var config = {
     apiKey: "AIzaSyBfWJ739R_iQ4VXhY_gi1hmB4_CFz_KB9o",
     authDomain: "geo-mario.firebaseapp.com",
@@ -14,5 +15,5 @@
 
 
 const firebaseApp =  firebase.initializeApp(config);
-
+firebaseApp.firestore().settings({ timestampsInSnapshots : true })
 export default firebaseApp.firestore()
