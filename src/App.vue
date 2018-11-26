@@ -19,4 +19,8 @@ export default {
 
 <style>
 
+body {
+  background: #ddd;
+}
+
 </style>
