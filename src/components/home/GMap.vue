@@ -40,15 +40,11 @@ export default {
 				lat: data.geolocation.lat,
 				lng: data.geolocation.lng
 			}, 
-				map 
+				map: map 
 		    })
 			// add click event to marker 
 			marker.addListener('click', () => {
-				this.$router.push({
-					name: 'ViewProfile', 
-					params: {
-						id: doc.id
-					}
+		this.$router.push({ name: 'ViewProfile', params: { id: doc.id }
 				})
 			})
 
