@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import GMap from '@/components/home/GMap'
+import ViewProfile from '@/profile/ViewProfile'
 import Signup from '@/components/auth/Signup'
 import Login from '@/components/auth/Login'
 import firebase from 'firebase'
@@ -26,6 +27,14 @@ const router = new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+     {
+      path: '/profile/:id',
+      name: 'ViewProfile',
+      component: ViewProfile,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
