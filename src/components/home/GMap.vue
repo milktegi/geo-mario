@@ -21,20 +21,35 @@ export default {
 	renderMap() {
 		const map = new google.maps.Map(document.getElementById('map'), {
 			center: { lat: this.lat, lng: this.lng },
-			zoom: 6,
-			maxZoom: 15,
+			zoom: 16,
+			maxZoom: 25,
 			minZoom: 3, 
 			streetViewControl: false
 		  })
 	  }
   },
-	mounted() {
-		this.renderMap()
-		console.log(firebase.auth().currentUser)
-		setTimeout(() => {
-			console.log(firebase.auth().currentUser)
-		}, 2000)
-	}
+mounted() {
+
+// get user geolocation api 
+// check api exists in the browser
+  if(navigator.geolocation) {
+	  navigator.geolocation.getCurrentPosition(pos => {
+		  this.lat = pos.coords.latitude
+		  this.lng = pos.coords.longitude
+		  this.renderMap()
+	  }, err => {
+		  console.log(err)
+		  this.renderMap()
+	  }, {
+		  maximumAge: 60000,
+		  timeout: 3000
+	  }) 
+  } else {
+	  // position centre by default values
+	  this.renderMap()
+  }
+
+}
 
 }
 </script>

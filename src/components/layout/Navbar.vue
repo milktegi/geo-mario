@@ -1,12 +1,13 @@
 <template>
 	
 <div class="navbar">
-<nav class="deep-purple darken-1">
+<nav class="indigo darken-1">
 	<div class="container">
-		<a href="" class="brand-logo left">geo-marios</a>
+		<router-link :to="{ name: 'GMap'}">geo-marios</router-link>
 		<ul class="right">
-			<li><a href="">로그인</a></li>
-			<li><a href="">회원가입</a></li>
+			<li><router-link :to="{ name: 'Signup'}">회원가입</router-link></li>
+			<li><router-link :to="{ name: 'Login'}">로그인</router-link></li>
+			<li><a @click="logout">로그아웃</a></li>
 		</ul>
 	</div>
 </nav>
@@ -15,11 +16,22 @@
 </template>
 
 <script>
+import * as firebase from 'firebase/app';
+
 export default {
 	name: 'Navbar',
 	data() {
 		return {
 
+		}
+	},
+	methods: {
+		logout() {
+			// since we using firebase, 
+			firebase.auth().signOut()
+					.then(() => {
+			this.$router.push({ name: 'Signup'})		
+					})
 		}
 	}
 

@@ -30,7 +30,7 @@
 <script>
 import slugify from "slugify";
 import db from "@/firebase/init";
-import firebase from "firebase";
+import * as firebase from 'firebase/app';
 
 export default {
   name: "Signup",
